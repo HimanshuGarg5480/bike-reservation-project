@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userSlice from "../feature/user/userSlice";
+import bikesFilterSlice from "../feature/filter/bikeFilter";
 
 const store = configureStore({
   reducer: {
-    user:userSlice
+    user:userSlice,
+    bikesFilter:bikesFilterSlice
   },
 });
 

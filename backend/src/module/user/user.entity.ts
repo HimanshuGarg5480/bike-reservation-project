@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Reservation } from '../reservation/reservation.entity';
 
 export enum Role {
     MANAGER = 'MANAGER',
@@ -22,6 +23,6 @@ export class User {
   @Column({ default: Role.REGULAR })
   role: Role; // 'MANAGER' or 'REGULAR'
 
-//   @OneToMany(() => Rental, (rental) => rental.user)
-//   rentals: Rental[];
+  @OneToMany(() => Reservation, reservation => reservation.user)
+  reservations: Reservation[];
 }
