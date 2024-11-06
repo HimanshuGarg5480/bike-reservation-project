@@ -2,15 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Bike } from './bike.entity';
-import { Reservation } from '../reservation/reservation.entity';
 
 @Injectable()
 export class BikeService {
   constructor(
     @InjectRepository(Bike)
     private readonly bikeRepository: Repository<Bike>,
-    @InjectRepository(Reservation)
-    private readonly reservationRepository: Repository<Reservation>,
   ) {}
 
   async filterBikes(filters: {
@@ -24,6 +21,17 @@ export class BikeService {
     limit?: number;
   }): Promise<{ allowBooking: boolean; bikeArray: Bike[] }> {
     const { model, color, location, avgRating, startDate, endDate, offset = 0, limit = 10 } = filters;
+
+    // Validate startDate and endDate
+    if (startDate && endDate) {
+      const now = new Date();
+      if (startDate < now || endDate < now) {
+        throw new Error('Start date and end date must be in the future.');
+      }
+      if (endDate < startDate) { 
+        throw new Error('End date cannot be earlier than start date.');
+      }
+    }
 
     // Base query with filters for model, color, location, avgRating, and availability
     const query = this.bikeRepository.createQueryBuilder('bike');

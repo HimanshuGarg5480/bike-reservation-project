@@ -5,6 +5,7 @@ import { User } from './module/user/user.entity';
 import { Bike } from './module/bike/bike.entity';
 import { BikeModule } from './module/bike/bike.module';
 import { Reservation } from './module/reservation/reservation.entity';
+import { ReservationModule } from './module/reservation/reservation.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { Reservation } from './module/reservation/reservation.entity';
       synchronize: true,
     }),
     UserModule,
-    BikeModule
+    BikeModule,
+    ReservationModule
   ]
 })
 export class AppModule {}

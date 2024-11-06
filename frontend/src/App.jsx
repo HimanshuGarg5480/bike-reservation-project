@@ -7,12 +7,17 @@ import "react-toastify/dist/ReactToastify.css";
 import Bike from "./pages/Bike/Bike";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Reservations from "./pages/Reservations/Reservations";
 
 const RenderPage = () => {
   return (
-    <div className="max-h-screen">
-      <Navbar />
-      <Outlet />
+    <div className="h-screen">
+      <div className="h-[7%]">
+        <Navbar />
+      </div>
+      <div className="h-[93%]">
+        <Outlet />
+      </div>
     </div>
   );
 };
@@ -41,6 +46,7 @@ const App = () => {
           }
         >
           <Route path="/" element={<Bike />} />
+          <Route path="/reservations" element={<Reservations />} />
         </Route>
       </Routes>
     </>

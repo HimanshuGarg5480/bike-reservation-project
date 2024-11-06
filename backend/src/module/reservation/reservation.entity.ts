@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Bike } from '../bike/bike.entity';
 
@@ -18,11 +18,11 @@ export class Reservation {
   @ManyToOne(() => Bike, (bike) => bike.reservations, { onDelete: 'CASCADE' })
   bike: Bike;
 
-  @Column({ type: 'datetime' })
-  startDate: Date;
+  @Column({ type: 'date', nullable: true })
+  startDate: Date|null;
 
-  @Column({ type: 'datetime' })
-  endDate: Date;
+  @Column({ type: 'date', nullable: true })
+  endDate: Date|null;
 
   @Column({ default: Status.active })
   status: Status;

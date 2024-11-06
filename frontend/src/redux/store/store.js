@@ -5,7 +5,7 @@ import bikesFilterSlice from "../feature/filter/bikeFilter";
 const store = configureStore({
   reducer: {
     user:userSlice,
-    bikesFilter:bikesFilterSlice
+    bikesFilter:bikesFilterSlice,
   },
 });
 

@@ -38,38 +38,8 @@ const FilterOptions = ({ setShowFilters }) => {
       })
     );
 
-    setShowFilters(false);
+    // setShowFilters(false);
   };
-
-  // const filterBikes = async () => {
-  //   try {
-  //     const { model, color, location, rating, fromDateTime, toDateTime } =
-  //       formData;
-
-  //     // Construct the query string based on non-falsy values
-  //     const params = new URLSearchParams();
-  //     if (model) params.append("model", model);
-  //     if (color) params.append("color", color);
-  //     if (location) params.append("location", location);
-  //     if (rating) params.append("avgRating", rating);
-  //     if (fromDateTime) params.append("startDate", fromDateTime);
-  //     if (toDateTime) params.append("endDate", toDateTime);
-
-  //     const response = await fetch(`/api/bikes/filter?${params.toString()}`, {
-  //       method: "GET",
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-  //       },
-  //     });
-
-  //     const data = await response.json();
-  //     dispatch(setBikes(data));
-  //     setShowFilters(false);
-  //   } catch (error) {
-  //     console.error("Error fetching filtered bikes:", error);
-  //   }
-  // };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -94,9 +64,7 @@ const FilterOptions = ({ setShowFilters }) => {
           className="mt-1 block w-full border border-gray-300 rounded-md p-2"
           type="text"
         />
-        {/* <select name="model" value={formData.model} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md p-2">
-          <option value="">Select Model</option>
-        </select> */}
+        
       </div>
       <div className="mb-4">
         <label className="block text-sm font-medium">Color:</label>
@@ -107,10 +75,6 @@ const FilterOptions = ({ setShowFilters }) => {
           className="mt-1 block w-full border border-gray-300 rounded-md p-2"
           type="text"
         />
-        {/* <select name="color" value={formData.color} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md p-2">
-          <option value="">Select Color</option>
-          
-        </select> */}
       </div>
       <div className="mb-4">
         <label className="block text-sm font-medium">Location:</label>

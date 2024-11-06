@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { BsStar, BsStarFill } from "react-icons/bs";
 
-const FiveStarReview = ({ avgRating, allowRating }) => {
+const FiveStarReview = ({ avgRating, allowRating,onRatingSelect }) => {
   const [rating, setRating] = useState(avgRating || 0);
   const [hoverRating, setHoverRating] = useState(0);
 
   const handleRatingClick = (value) => {
     setRating(value);
     if (onRatingSelect) onRatingSelect(value);
+
   };
 
   const handleMouseEnter = (value) => {

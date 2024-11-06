@@ -25,7 +25,7 @@ const Navbar = () => {
     }
   };
   return (
-    <div className="bg-blue-500 flex justify-between items-center text-gray-50 px-2 sm:px-6 py-3 text-base">
+    <div className="bg-blue-500 flex justify-between items-center text-gray-50 px-2 sm:px-6 py-3 text-base h-full">
       <div className="flex gap-3">
         <Link to="/">
           <div className="cursor-pointer hover:text-gray-100">Bikes</div>
