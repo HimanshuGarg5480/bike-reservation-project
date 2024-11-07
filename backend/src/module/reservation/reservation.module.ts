@@ -7,14 +7,17 @@ import { ReservationController } from './reservation.controller';
 import { UserModule } from '../user/user.module';
 import { BikeModule } from '../bike/bike.module';
 import { User } from '../user/user.entity';
+import { JwtAuthGuard } from 'src/guards/jwtAuth.guard';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Bike, Reservation,User]),
+    JwtModule,
     UserModule,
     BikeModule,
   ],
-  providers: [ReservationService],
+  providers: [ReservationService,JwtAuthGuard],
   controllers: [ReservationController],
 })
 export class ReservationModule {}

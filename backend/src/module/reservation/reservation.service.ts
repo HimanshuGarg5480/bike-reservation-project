@@ -43,9 +43,9 @@ export class ReservationService {
     return await this.reservationRepository.save(reservation);
   }
 
-  // async findAllReservations(): Promise<Reservation[]> {
-  //     return await this.reservationRepository.find({ relations: ['bike', 'user'] });
-  // }
+  async findAllReservations(): Promise<Reservation[]> {
+      return await this.reservationRepository.find({ relations: ['bike'] });
+  }
 
   async findUserReservations(userId: number): Promise<Reservation[]> {
     return await this.reservationRepository.find({
@@ -82,6 +82,8 @@ export class ReservationService {
     reservation.bike.isAvailable = true;
     await this.bikeRepository.save(reservation.bike);
 
+    await this.cancelReservation(id);
+
     const result = await this.reservationRepository.delete(id);
     if (result.affected === 0)
       throw new NotFoundException(`Reservation with ID ${id} not found`);
@@ -97,5 +99,12 @@ export class ReservationService {
 
     reservation.rating = rating;
     return await this.reservationRepository.save(reservation);
+  }
+
+  async findBikeReservations(bikeId: number): Promise<Reservation[]> {
+    return await this.reservationRepository.find({
+      where: { bike: { id: bikeId } },
+      relations: ['bike'],
+    });
   }
 }

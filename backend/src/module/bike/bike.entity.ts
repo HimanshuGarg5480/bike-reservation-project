@@ -19,7 +19,7 @@ export class Bike {
     @Column({ default: true })
     isAvailable: boolean;
 
-    @Column({ type: 'float', nullable: true })
+    @Column({ type: 'float', default: 3, nullable: true })
     avgRating: number;
 
     @OneToMany(() => Reservation, reservation => reservation.bike)

@@ -3,10 +3,14 @@ import FiveStarReview from "../../../components/FiveStarReview";
 import { FaCircle } from "react-icons/fa";
 import notify from "../../../utils/notification";
 import { reloadBikeList } from "../../Bike/components/BikeList";
+import { useSelector } from "react-redux";
 
 const ReservationCard = ({ reservation, fetchReservations }) => {
   const startDate = new Date(reservation.startDate).toLocaleDateString();
   const endDate = new Date(reservation.endDate).toLocaleDateString();
+
+
+  const user = useSelector((state)=>state.user.userInfo);
 
   const [reservationRating, setReservationRating] = useState(0);
 
@@ -78,7 +82,7 @@ const ReservationCard = ({ reservation, fetchReservations }) => {
         <div>
           <FiveStarReview
             avgRating={reservation.rating}
-            allowRating={reservation.rating === null ? true : false}
+            allowRating={(reservation.rating === null && user.role!='MANAGER') ? true : false}
             onRatingSelect={setReservationRating}
           />
         </div>
@@ -86,7 +90,7 @@ const ReservationCard = ({ reservation, fetchReservations }) => {
           {startDate} to {endDate}
         </div>
       </div>
-      <div className="flex justify-between text-xs sm:text-sm tracking-widest">
+      {user.role!='MANAGER' && <div className="flex justify-between text-xs sm:text-sm tracking-widest">
         {!reservation.rating && (
           <div
             className="uppercase text-blue-700 cursor-pointer"
@@ -103,7 +107,7 @@ const ReservationCard = ({ reservation, fetchReservations }) => {
             cancel reservation
           </div>
         )}
-      </div>
+      </div>}
     </div>
   );
 };

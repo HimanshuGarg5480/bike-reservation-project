@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import BikeCard from "./BikeCard";
 import PageInitiation from "../../../components/PageInitiation";
+import notify from "../../../utils/notification";
 
 let reloadBikeList;
 
@@ -61,13 +62,20 @@ const BikeList = () => {
       });
 
       const data = await response.json();
-      setBikes(data.bikeArray);
+
+      if(!response.ok){
+        throw new Error(data.message)
+      }
+      if (data.bikeArray) {
+        setBikes(data.bikeArray);
+      }
     } catch (error) {
-      console.error("Error fetching filtered bikes:", error);
+      console.log(error)
+      notify(`something went wrong: ${error}`,"error");
     }
   };
 
- reloadBikeList = () => {
+  reloadBikeList = () => {
     fetchBikes();
   };
 
@@ -103,4 +111,4 @@ const BikeList = () => {
 };
 
 export default BikeList;
-export {reloadBikeList}
+export { reloadBikeList };
