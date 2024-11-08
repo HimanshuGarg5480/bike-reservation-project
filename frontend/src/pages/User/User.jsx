@@ -178,7 +178,6 @@ const User = () => {
               userId={user?.id}
               username={user?.username}
               email={user?.email}
-              manager={user?.role==="MANAGER"}
               role={user?.role}
               reloadUserList={fetchUsers}
             />

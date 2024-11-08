@@ -8,7 +8,6 @@ const UserCard = ({
   userId,
   username,
   email,
-  manager,
   role,
   reloadUserList,
 }) => {
