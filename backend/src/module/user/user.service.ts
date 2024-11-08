@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { JwtService } from '@nestjs/jwt';
@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { CreateUserParm, LoginUserParm } from './utils/types';
 import { Response } from 'express';
+import { CreateUserDto } from './dtos/CreateUser.dto';
 
 @Injectable()
 export class UserService {
@@ -75,5 +76,37 @@ export class UserService {
   async logoutUser(res: Response): Promise<any> {
     res.clearCookie('jwt');
     
+  }
+
+  async getAllUsers(): Promise<Omit<User, 'password'>[]> {
+    const users = await this.userRepository.find();
+    return users.map(({ password, ...userWithoutPassword }) => userWithoutPassword);
+  }
+
+  async deleteUser(userId): Promise<void> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new Error('User not found'); // Handle user not found
+    }
+    await this.userRepository.remove(user); // Delete the user
+  }
+
+  async editUser(userId: number, userData: Partial<CreateUserDto>): Promise<any> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new BadRequestException('User not found'); // Handle user not found
+    }
+
+    // Update user fields
+    Object.assign(user, userData);
+    return await this.userRepository.save(user)
+      .then(updatedUser => {
+        // Remove password before returning user data
+        const { password, ...userWithoutPassword } = updatedUser;
+        return userWithoutPassword;
+      })
+      .catch((error) => {
+        throw new Error('Error updating user: ' + error.message); // Handle errors during user update
+      });
   }
 }

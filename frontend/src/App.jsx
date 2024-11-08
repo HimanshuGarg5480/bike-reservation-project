@@ -8,6 +8,7 @@ import Bike from "./pages/Bike/Bike";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Reservations from "./pages/Reservations/Reservations";
+import User from "./pages/User/User";
 
 const RenderPage = () => {
   return (
@@ -47,6 +48,7 @@ const App = () => {
         >
           <Route path="/" element={<Bike />} />
           <Route path="/reservations" element={<Reservations />} />
+          <Route path="/users" element={<User />} />
         </Route>
       </Routes>
     </>
