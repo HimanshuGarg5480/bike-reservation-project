@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setUser } from "../../redux/feature/user/userSlice";
-import { ToastContainer, toast } from "react-toastify";
+import { loginSchema } from "./validation/login.validation";
 import notify from "../../utils/notification";
 
 const Login = () => {
@@ -18,6 +18,11 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const validationResult = loginSchema.validate(loginData);
+      if (validationResult.error) {
+        throw new Error(validationResult.error.details[0].message);
+      }
+
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
@@ -32,7 +37,7 @@ const Login = () => {
       notify("Login Successful", "success");
       localStorage.setItem("jwt", data.user.token);
       dispatch(setUser(data.user));
-      navigate('/');
+      navigate("/");
     } catch (error) {
       console.log("Error:", error);
       notify(error.message, "error");

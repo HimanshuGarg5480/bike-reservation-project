@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import notify from "../../utils/notification";
 import { setUser } from "../../redux/feature/user/userSlice";
+import { signupSchema } from "./validation/signup.validation";
 
 const Signup = () => {
   const [signupData, setSignupData] = useState({
@@ -10,6 +11,8 @@ const Signup = () => {
     email: "",
     password: "",
   });
+
+  const [confirmPassword, setConfirmPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -21,6 +24,14 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const validationResult = signupSchema.validate(signupData);
+      if (validationResult.error) {
+        throw new Error(validationResult.error.details[0].message);
+      }
+
+      if (confirmPassword != signupData.password) {
+        throw new Error("Confirm password and password field must be same");
+      }
       const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
@@ -35,7 +46,7 @@ const Signup = () => {
       notify("Signup Successful", "success");
       localStorage.setItem("jwt", data.user.token);
       dispatch(setUser(data.user));
-      navigate('/');
+      navigate("/");
     } catch (error) {
       console.log("Error:", error);
       notify(error.message, "error");
@@ -112,6 +123,30 @@ const Signup = () => {
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Confirm Password
+                </label>
+              </div>
+              <div className="mt-2">
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  required
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  onChange={(e) => {
+                    e.preventDefault();
+                    setConfirmPassword(e.target.value);
+                  }}
                 />
               </div>
             </div>
