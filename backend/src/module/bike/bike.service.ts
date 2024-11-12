@@ -61,9 +61,9 @@ export class BikeService {
 
     // Base query with filters for model, color, location, avgRating, and availabilite
     const query = this.bikeRepository.createQueryBuilder('bike');
-    if (model) query.andWhere('bike.model = :model', { model });
-    if (color) query.andWhere('bike.color = :color', { color });
-    if (location) query.andWhere('bike.location = :location', { location });
+    if (model) query.andWhere('bike.model LIKE :model', { model: `${model}%` });
+    if (color) query.andWhere('bike.color LIKE :color', { color: `${color}%` });
+    if (location) query.andWhere('bike.location LIKE :location', { location: `${location}%` });
     if (avgRating)
       query.andWhere('bike.avgRating >= :avgRating', { avgRating });
 
