@@ -17,11 +17,16 @@ const BikeList = () => {
       const { model, color, location, rating, fromDateTime, toDateTime } =
         bikeFilter;
 
+      // Convert model, color, and location to lowercase
+      const lowerModel = model ? model.toLowerCase() : model;
+      const lowerColor = color ? color.toLowerCase() : color;
+      const lowerLocation = location ? location.toLowerCase() : location;
+
       // Construct the query string based on non-falsy values
       const params = new URLSearchParams();
-      if (model) params.append("model", model);
-      if (color) params.append("color", color);
-      if (location) params.append("location", location);
+      if (lowerModel) params.append("model", lowerModel);
+      if (lowerColor) params.append("color", lowerColor);
+      if (lowerLocation) params.append("location", lowerLocation);
       if (rating) params.append("avgRating", rating);
       if (fromDateTime) params.append("startDate", fromDateTime);
       if (toDateTime) params.append("endDate", toDateTime);
@@ -45,11 +50,16 @@ const BikeList = () => {
       const { model, color, location, rating, fromDateTime, toDateTime } =
         bikeFilter;
 
+      // Convert model, color, and location to lowercase
+      const lowerModel = model ? model.toLowerCase() : model;
+      const lowerColor = color ? color.toLowerCase() : color;
+      const lowerLocation = location ? location.toLowerCase() : location;
+
       // Construct the query string based on non-falsy values
       const params = new URLSearchParams();
-      if (model) params.append("model", model);
-      if (color) params.append("color", color);
-      if (location) params.append("location", location);
+      if (lowerModel) params.append("model", lowerModel);
+      if (lowerColor) params.append("color", lowerColor);
+      if (lowerLocation) params.append("location", lowerLocation);
       if (rating) params.append("avgRating", rating);
       if (fromDateTime) params.append("startDate", fromDateTime);
       if (toDateTime) params.append("endDate", toDateTime);
