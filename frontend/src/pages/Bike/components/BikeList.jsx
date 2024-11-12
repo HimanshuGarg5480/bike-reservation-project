@@ -68,6 +68,9 @@ const BikeList = () => {
       }
       if (data.bikeArray) {
         setBikes(data.bikeArray);
+        if(data.bikeArray.length==0){
+          notify("no bikes found","error");
+        }
       }
     } catch (error) {
       console.log(error)
