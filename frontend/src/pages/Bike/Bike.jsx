@@ -27,16 +27,23 @@ const Bike = () => {
 
   const handleCreateBike = async () => {
     try {
-      if(!formData.model || !formData.color || !formData.location){
-        notify("all the feilds are required","error")
-        throw new Error("all the feilds are required");
+      const formattedData = {
+        model: formData.model.trim().toLowerCase(),
+        color: formData.color.trim().toLowerCase(),
+        location: formData.location.trim().toLowerCase(),
+        isAvailable: formData.isAvailable,
+      };
+
+      if (!formattedData.model || !formattedData.color || !formattedData.location) {
+        notify("all the fields are required", "error");
+        throw new Error("all the fields are required");
       }
       const response = await fetch("/api/bikes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formattedData),
       });
 
       if (!response.ok) {
@@ -63,7 +70,7 @@ const Bike = () => {
         Add Filters
       </button>
       {showFilters && (
-        <div className="absolute top-0 left-0">
+        <div className="absolute block sm:hidden top-0 left-0">
           <FilterOptions setShowFilters={setShowFilters} />
         </div>
       )}

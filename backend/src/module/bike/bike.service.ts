@@ -63,7 +63,10 @@ export class BikeService {
     const query = this.bikeRepository.createQueryBuilder('bike');
     if (model) query.andWhere('bike.model LIKE :model', { model: `${model}%` });
     if (color) query.andWhere('bike.color LIKE :color', { color: `${color}%` });
-    if (location) query.andWhere('bike.location LIKE :location', { location: `${location}%` });
+    if (location)
+      query.andWhere('bike.location LIKE :location', {
+        location: `${location}%`,
+      });
     if (avgRating)
       query.andWhere('bike.avgRating >= :avgRating', { avgRating });
 
@@ -77,10 +80,11 @@ export class BikeService {
       query
         .leftJoinAndSelect('bike.reservations', 'reservation')
         .andWhere(
-          '(reservation.startDate IS NULL OR (reservation.endDate < :startDate OR reservation.startDate > :endDate))',
+          '((reservation.endDate < :startDate OR reservation.startDate > :endDate) OR reservation.id IS NULL OR reservation.status = :canceledStatus)', // Updated condition to include canceled reservations
           {
             startDate: startDate.toISOString(), // Convert to ISO string for SQLite
             endDate: endDate.toISOString(), // Convert to ISO string for SQLite
+            canceledStatus: 'canceled'
           },
         );
     }
@@ -108,7 +112,7 @@ export class BikeService {
   }
 
   async update(id: number, updateData: Partial<UpdateBikeDto>): Promise<Bike> {
-    console.log(updateData)
+    console.log(updateData);
     await this.bikeRepository.update(id, updateData);
     const updatedBike = await this.findOne(id);
     return updatedBike;
@@ -120,4 +124,3 @@ export class BikeService {
       throw new NotFoundException(`Bike with ID ${id} not found`);
   }
 }
- 

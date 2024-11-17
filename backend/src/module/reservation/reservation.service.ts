@@ -27,9 +27,6 @@ export class ReservationService {
 
     if (!user) throw new NotFoundException(`User with ID ${userId} not found`);
     if (!bike) throw new NotFoundException(`Bike with ID ${bikeId} not found`);
-
-    bike.isAvailable = false;
-
     const reservation = this.reservationRepository.create({
       user,
       bike,
@@ -66,8 +63,6 @@ export class ReservationService {
     await this.bikeRepository.save(reservation.bike);
 
     reservation.status = Status.canceled;
-    reservation.startDate=null;
-    reservation.endDate=null;
     return await this.reservationRepository.save(reservation);
   }
 
@@ -96,6 +91,9 @@ export class ReservationService {
     const reservation = await this.reservationRepository.findOneBy({ id });
     if (!reservation)
       throw new NotFoundException(`Reservation with ID ${id} not found`);
+
+    if (rating<1 || rating>5)
+      throw new NotFoundException(`rating cannot be less then 1 or greater then 5`);
 
     reservation.rating = rating;
     return await this.reservationRepository.save(reservation);

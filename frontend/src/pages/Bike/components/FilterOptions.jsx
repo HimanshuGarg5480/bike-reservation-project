@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { RxCross2 } from "react-icons/rx";
 import { setBikesFilter } from "../../../redux/feature/filter/bikeFilter";
+import notify from "../../../utils/notification";
 
 const FilterOptions = ({ setShowFilters }) => {
   const [formData, setFormData] = useState({
@@ -27,14 +28,33 @@ const FilterOptions = ({ setShowFilters }) => {
   const addFilters = () => {
     const { model, color, location, rating, fromDateTime, toDateTime } =
       formData;
+
+    // Trim leading and trailing spaces
+    const trimmedModel = model.trim();
+    const trimmedColor = color.trim();
+    const trimmedLocation = location.trim();
+    const trimmedFromDateTime = fromDateTime.trim();
+    const trimmedToDateTime = toDateTime.trim();
+
+    // Check if toDateTime is smaller than fromDateTime
+    if (trimmedToDateTime < trimmedFromDateTime) {
+        notify('To Date and Time must be greater than From Date and Time',"error"); // Error notification
+        setFormData((prev) => ({
+            ...prev,
+            fromDateTime: "",
+            toDateTime: "",
+        })); // Reset fields
+        return; // Exit the function
+    }
+
     dispatch(
       setBikesFilter({
-        model,
-        color,
-        location,
+        model: trimmedModel,
+        color: trimmedColor,
+        location: trimmedLocation,
         rating,
-        fromDateTime,
-        toDateTime,
+        fromDateTime: trimmedFromDateTime,
+        toDateTime: trimmedToDateTime,
       })
     );
 
@@ -45,8 +65,20 @@ const FilterOptions = ({ setShowFilters }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const clearFilters = () => {
+    setFormData({
+      currentTime: "",
+      rating: 3,
+      model: "",
+      color: "",
+      location: "",
+      fromDateTime: "",
+      toDateTime: "",
+    }); // Reset all filter fields
+  };
+
   return (
-    <div className=" px-4 bg-white rounded-lg shadow-md py-4">
+    <div className="z-10 back px-4 bg-white rounded-lg shadow-md py-4">
       <div className="flex justify-end sm:hidden">
         <span className="cursor-pointer" onClick={() => setShowFilters(false)}>
           <RxCross2 />
@@ -134,6 +166,13 @@ const FilterOptions = ({ setShowFilters }) => {
           Submit
         </button>
       </div>
+      <button
+        onClick={clearFilters}
+        type="button"
+        className="mt-4 w-full bg-gray-500 text-white rounded-md p-2"
+      >
+        Clear Filters
+      </button>
     </div>
   );
 };
